@@ -7,6 +7,7 @@
 	
 
 	$tableNumber = $_GET['table_number'];
+	$transactionId = $_GET['transaction_id'];
 	$stats = $_GET['status'];
 
 	if ($stats == "S" OR $stats == "s") {
@@ -17,7 +18,7 @@
 		`food_menu_items` fmi ON fmi.`item_id` = od.`item_id` LEFT JOIN
 		`food_servings` fs ON fs.`serving_id` = od.`serving_id` LEFT JOIN
 		`side_dish` sd ON sd.`side_dish_id` = od.`side_dish_id`
-		WHERE od.`table_number` = $tableNumber AND od.`status` = '$stats'";
+		WHERE transaction_id = '$transactionId' AND od.`status` = '$stats'";
 	} elseif ($stats == "C" OR $stats == "c") {
 		# code...
 		$sql = "SELECT id, qty, od.`status`, od.`item_id`, od.`sauces`,
@@ -26,14 +27,14 @@
 		`food_menu_items` fmi ON fmi.`item_id` = od.`item_id` LEFT JOIN
 		`food_servings` fs ON fs.`serving_id` = od.`serving_id` LEFT JOIN
 		`side_dish` sd ON sd.`side_dish_id` = od.`side_dish_id`
-		WHERE od.`table_number` = $tableNumber AND od.`status` = '$stats'";
+		WHERE transaction_id = '$transactionId' AND od.`status` = '$stats'";
 	} else {
 		$sql = "SELECT id, qty, tod.`item_id`, tod.`sauces`, fmi.`menu_name`, fs.`serving_name`, sd.`side_dish_name`
 		FROM `temporary_order_detail` tod LEFT JOIN
 		`food_menu_items` fmi ON fmi.`item_id` = tod.`item_id` LEFT JOIN
 		`food_servings` fs ON fs.`serving_id` = tod.`serving_id` LEFT JOIN
 		`side_dish` sd ON sd.`side_dish_id` = tod.`side_dish_id`
-		WHERE tod.`table_number` = $tableNumber";
+		WHERE transaction_id = '$transactionId'";
 	}
 
 	$item_orders = array();

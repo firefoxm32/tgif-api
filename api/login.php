@@ -10,6 +10,7 @@
 	$userName = $_POST['username'];
 	$pass = $_POST['password'];
 
+
 	$sql = "SELECT u.`user_status`, u.`table_number` FROM users u WHERE u.`username` = '$userName' 
 		AND u.`password` = '$pass' AND u.`user_type`='M'";
 	$result = $conn->query($sql);
@@ -24,11 +25,12 @@
 		echo json_encode($response);
 		die;
 	}
-
+	$tableNumber = 0;
 	if ($result->num_rows > 0) {
 		$row = $result->fetch_object();
 		if (strtoupper($row->user_status) == 'I') {
 			$valid = true;
+			$tableNumber = $row->table_number;
 			$message = 'Login successfull';
 			$status = 'ok';
 		} else {
@@ -56,7 +58,8 @@
 
 	$response = array(
 		'status' => $status,
-		'message'=> $message
+		'message'=> $message,
+		'table_number' => $tableNumber
 	);
 
 	$conn->close();

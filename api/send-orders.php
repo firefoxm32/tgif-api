@@ -6,54 +6,115 @@
 	$conn = $db->connect();
 
 	$tableNumber = $_POST['table_number'];
+	$transactionId = $_POST['transaction_id'];
+	// $transactionId = 'a56fab2a-6280-4a7b-ae53-ec0a795735e6';
 
-	$sqlSelect = "SELECT toh.`date_order` FROM `temp_order_header` toh WHERE toh.`table_number` = $tableNumber";
+	// $sql = "SELECT * FROM `order_detail` od
+	// 		WHERE od.`transaction_id` = $transactionId AND od.`item_id` = $itemId
+	// 		AND od.`serving_id` = $servingId 
+	// 		AND od.`sauces` = '$serializedSauces'
+	// 		AND od.`side_dish_id` = $sideDishId";
 
-	$result = $conn->query($sqlSelect);
+	// $result = $conn->query($sql);
+	// if ($result->num_rows > 0) {
+	// 	# code...
+	// 	//Update record order if existing
+	// 	// $sql = "UPDATE `temporary_order_detail`
+	// 	// 		SET qty = qty + $qty
+	// 	// 		WHERE table_number = $tableNumber AND item_id = $itemId
+	// 	// 		AND serving_id = $servingId AND sauces = '$serializedSauces'
+	// 	// 		AND side_dish_id = $sideDishId";
+	// 	$sql = "UPDATE `temporary_order_detail`
+	// 			SET qty = qty + $qty
+	// 			WHERE transaction_id='$transactionId'";
 
-	if ($result->num_rows > 0) {
+	// 	if (!$conn->query($sql)) {
+	// 		echo json_encode(
+	// 			array(
+	// 				'status'  => 'error',
+	// 				'message' => 'Error in saving order toh',
+	// 				'error'   => mysqli_error($conn),
+	// 				'tableNumber' => $tableNumber,
+	// 				'sql'     => $sql
+	// 			)
+	// 		);
+	// 		die;
+	// 	}
+	// 	echo json_encode(
+	// 		array(
+	// 			'status' => 'Ok',
+	// 			'message' => 'Save Successfull',
+	// 			'tableNumber' => $tableNumber,
+	// 			'sql'     => $sql
+	// 		)
+	// 	);
+
+	// 	$conn->close();
+	// 	die;
+	// }
+
+	$sql = "SELECT * FROM order_header WHERE transaction_id = '$transactionId'";// check if exist
+	$result = $conn->query($sql);
+
+	if($result->num_rows > 0) {
+		$sqlDeleteHeader = "DELETE FROM temp_order_header WHERE transaction_id = '$transactionId'";
+		if (!$conn->query($sqlDeleteHeader)) {
 		# code...
-		$rows = $result->fetch_object();
-		$dateOrder =  $rows->date_order;
+			echo json_encode(
+				array(
+					'status'  => 'error',
+					'error'   => mysqli_error($conn),
+					'message' => 'Error in deleting order -> order_header',
+					'tableNumber' => $tableNumber,
+					'sqlDeleteHeader'     => $sqlDeleteHeader
+				)
+			);
+			$conn->close();
+			die;
+		}
+	} else {
+		$sqlInsertHeader = "INSERT INTO `order_header` SELECT * FROM temp_order_header WHERE transaction_id = '$transactionId'";
+		if (!$conn->query($sqlInsertHeader)) {
+			# code...
+			echo json_encode(
+				array(
+					'status'  => 'error',
+					'error'   => mysqli_error($conn),
+					'message' => 'Error in saving order -> order_header',
+					'tableNumber' => $tableNumber,
+					'sqlInsertHeader'     => $sqlInsertHeader
+				)
+			);
+			$conn->close();
+			die;
+		} // INSERT INTO order_header
+
+		$sqlDeleteHeader = "DELETE FROM `temp_order_header` WHERE transaction_id = '$transactionId'";
+
+		if (!$conn->query($sqlDeleteHeader)) {
+			# code...
+			echo json_encode(
+				array(
+					'status'  => 'error',
+					'message' => 'Error in deleting order -> order_header',
+					'tableNumber' => $tableNumber,
+					'sqlDeleteHeader'     => $sqlDeleteHeader
+				)
+			);
+			$conn->close();
+			die;
+		} // DELETE FROM temp_order_header	
 	}
 
-	$sqlInsertHeader = "INSERT INTO `order_header`(table_number, date_order) SELECT `table_number`, `date_order` FROM `temp_order_header` WHERE `table_number` = $tableNumber";
-	if (!$conn->query($sqlInsertHeader)) {
-		# code...
-		echo json_encode(
-			array(
-				'status'  => 'error',
-				'message' => 'Error in saving order -> order_header',
-				'tableNumber' => $tableNumber,
-				'sqlInsertHeader'     => $sqlInsertHeader
-			)
-		);
-		$conn->close();
-		die;
-	} // INSERT INTO order_header
 
-	$sqlDeleteHeader = "DELETE FROM `temp_order_header` WHERE table_number = $tableNumber";
-
-	if (!$conn->query($sqlDeleteHeader)) {
-		# code...
-		echo json_encode(
-			array(
-				'status'  => 'error',
-				'message' => 'Error in deleting order -> order_header',
-				'tableNumber' => $tableNumber,
-				'sqlDeleteHeader'     => $sqlDeleteHeader
-			)
-		);
-		$conn->close();
-		die;
-	} // DELETE FROM temp_order_header
+	
 
 	$sqlInsertDetails = "INSERT INTO `order_detail`(id, table_number, item_id,
-			 serving_id, sauces, side_dish_id, qty, date_order)
+			 serving_id, sauces, side_dish_id, qty, transaction_id)
 		SELECT tod.`id`, tod.`table_number`,
 			tod.`item_id`, tod.`serving_id`, tod.`sauces`,
-			tod.`side_dish_id`, tod.`qty`, tod.`date_order`
-		FROM `temporary_order_detail` tod WHERE tod.`table_number` = $tableNumber";
+			tod.`side_dish_id`, tod.`qty`, tod.`transaction_id`
+		FROM `temporary_order_detail` tod WHERE tod.`transaction_id` = '$transactionId'";
 
 	if (!$conn->query($sqlInsertDetails)) {
 		# code...
@@ -69,7 +130,7 @@
 		die;
 	} // INSERT INTO order_detail
 
-	$sqlDeleteDetails = "DELETE FROM `temporary_order_detail` WHERE table_number = $tableNumber";
+	$sqlDeleteDetails = "DELETE FROM `temporary_order_detail` WHERE transaction_id = '$transactionId'";
 
 	if (!$conn->query($sqlDeleteDetails)) {
 		# code...
@@ -85,7 +146,7 @@
 		die;	
 	} // DELETE FROM temporary_order_detail
 	
-	$sqlUpdateDetails = "UPDATE `order_detail` SET status = 'C' WHERE table_number = $tableNumber AND od.`date_order` = $dateOrder";
+	$sqlUpdateDetails = "UPDATE `order_detail` SET status = 'C' WHERE transaction_id = '$transactionId'";
 	
 	if (!$conn->query($sqlUpdateDetails)) {
 		# code...
@@ -103,14 +164,8 @@
 
 	echo json_encode(
 		array(
-			'status' => 'Ok',
+			'status' => 'ok',
 			'message' => 'Save Successfull',
-			'tableNumber' => $tableNumber,
-			'sqlInsertHeader'  => $sqlInsertHeader,
-			'sqlDeleteHeader'  => $sqlDeleteHeader,
-			'sqlInsertDetails' => $sqlInsertDetails,
-			'sqlDeleteDetails' => $sqlDeleteDetails,
-			'sqlUpdateDetails' => $sqlUpdateDetails
 		)
 	);
 

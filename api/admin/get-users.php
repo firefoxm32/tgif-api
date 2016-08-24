@@ -5,7 +5,7 @@
 	$db = new DBConnection();
 	$conn = $db->connect();
 
-	$sql = "SELECT * FROM users";
+	$sql = "SELECT * FROM users u ORDER BY u.`table_number` ASC";
 
 	$result = $conn->query($sql);
 

@@ -33,18 +33,17 @@
 				'sql'     => $sql
 			)
 		);
+		$conn->close();
 		die;
 	}
 
-
+	$conn->close();
 	echo json_encode(
 		array(
-			'status' => 'Ok',
+			'status' => 'ok',
 			'message' => $message,
 			'tableNumber' => $tableNumber,
 			'sql'     => $sql
 		)
 	);
-
-	$conn->close();
- ?>
+ 	die;

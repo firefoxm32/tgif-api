@@ -13,18 +13,33 @@
 		# code...
 		$transactionId = $result->fetch_object()->transaction_id;
 	}
+
+	$sql1 = "SELECT cd.`credit`, ch.`cash_amount` FROM `cash_details` cd 
+		LEFT JOIN `cash_header` ch ON ch.`transaction_id` = cd.`transaction_id`
+		WHERE cd.`transaction_id` = '$transactionId'";
 	
+	$result1 = $conn->query($sql1);
+	$credit = 0.0;
+	$cash = 0.0;
+	if ($result1->num_rows > 0) {
+		# code...
+		$row1 = $result1->fetch_object();
+		$credit = $row1->credit;
+		$cash = $row1->cash_amount;
+	}
+
 	$sql = "SELECT oh.`transaction_id`, oh.`date_order`, od.`item_id`,
 		od.`serving_id`, od.`side_dish_id`, od.`sauces`, od.`qty`,
 		fs.`serving_name`,fp.`price`,sd.`side_dish_name`, fmi.`menu_name`,
 		sd.`sd_abbreviation`, fs.`fs_abbreviation`
 		FROM `order_header` oh
 		LEFT JOIN `order_detail` od ON od.`transaction_id` = oh.`transaction_id`
+		LEFT JOIN `cash_header` ch ON ch.`transaction_id` = oh.`transaction_id`
 		LEFT JOIN `food_menu_items` fmi ON fmi.`item_id` = od.`item_id`
 		LEFT JOIN `food_servings` fs ON fs.`serving_id` = od.`serving_id`
 		LEFT JOIN `food_price` fp ON fp.`serving_id` = fs.`serving_id`
 		LEFT JOIN `side_dish` sd ON sd.`side_dish_id` = od.`side_dish_id`
-		WHERE oh.`transaction_id` = $transactionId";
+		WHERE oh.`transaction_id` = '$transactionId'";
 
 	$result = $conn->query($sql);
 	if ($result->num_rows > 0) {
@@ -60,13 +75,16 @@
 			$item->qty = $row->qty;
 			$item->price = $row->price;
 			$item->sauces = $sauces;
+			$item->credit = $credit;
+			$item->cash = $cash;
 			$items[] = $item;
 		}
 	}
 
 	$response = array(
-		'status' => "Ok",
+		'status' => "ok",
 		'sql'    => $sql,
+		'sql1'   => $sql1,
 		'param'  => $transactionId,
 		'items'  => (array)$items
 	);

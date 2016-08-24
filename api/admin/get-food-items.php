@@ -14,14 +14,14 @@
 	if ($field == "") {
 		# code...
 		$sql = "SELECT fmi.`item_id`, fmi.`menu_id`, fm.`label`, fmi.`menu_name`, 
-			fmi.`image`, fmi.`description` 
+			fmi.`image`, fmi.`description`, fmi.`promo_price`, fmi.`promo_status`
 		FROM `food_menu_items` fmi LEFT JOIN `food_menus` fm 
-		ON fmi.`menu_id` = fm.`menu_id`";
+		ON fmi.`menu_id` = fm.`menu_id` WHERE fmi.`status` = 'A'";
 	} else {
 		$sql = "SELECT fmi.`item_id`, fmi.`menu_id`, fm.`label`, fmi.`menu_name`, 
 			fmi.`image`, fmi.`description` 
 		FROM `food_menu_items` fmi LEFT JOIN `food_menus` fm 
-		ON fmi.`menu_id` = fm.`menu_id` WHERE $field LIKE '%$val%'";
+		ON fmi.`menu_id` = fm.`menu_id` WHERE $field LIKE '%$val%' AND WHERE fmi.`status` = 'A'";
 	}
 
 	
@@ -35,11 +35,12 @@
 			$itemList[] = $rows;
 		}
 	}
+	$conn->close();
 	$response = array(
-		'status' => "Ok",
+		'status' => "ok",
 		'sql'    => $sql,
 		'param'  => $param,
 		'items'  => $itemList
 	);
 	echo json_encode($response);
-	$conn->close();
+	die;
