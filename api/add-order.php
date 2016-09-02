@@ -23,12 +23,13 @@
 			echo json_encode(
 				array(
 					'status'  => 'error',
-					'message' => 'Error in saving order toh',
+					'message' => 'Error in adding order toh',
 					'error'   => mysqli_error($conn),
 					'tableNumber' => $tableNumber,
 					'sql'     => $sql
 				)
 			);
+			$conn->close();
 			die;
 		}
 	}
@@ -62,24 +63,24 @@
 			echo json_encode(
 				array(
 					'status'  => 'error',
-					'message' => 'Error in saving order toh',
+					'message' => 'Error in adding order toh',
 					'error'   => mysqli_error($conn),
 					'tableNumber' => $tableNumber,
 					'sql'     => $sql
 				)
 			);
+			$conn->close();
 			die;
 		}
+		$conn->close();
 		echo json_encode(
 			array(
 				'status' => 'Ok',
-				'message' => 'Save Successfull',
+				'message' => 'Order successfully added',
 				'tableNumber' => $tableNumber,
 				'sql'     => $sql
 			)
 		);
-
-		$conn->close();
 		die;
 	}
 
@@ -92,25 +93,23 @@
 		echo json_encode(
 			array(
 				'status'  => 'error',
-				'message' => 'Error in saving order tod',
+				'message' => 'Error in adding order tod',
 				'error'   => mysqli_error($conn),
 				'sql'     => $sql
 			)
 		);
+		$conn->close();
 		die;
 	}
-
+	$conn->close();
 	echo json_encode(
 		array(
 			'status' => 'ok',
-			'message' => 'Save Successfull',
+			'message' => 'Order successfully added',
 			'tableNumber' => $tableNumber,
 			'sql'     => $sql
 		)
 	);
-
-	$conn->close();
 	die;
-?>
 
 

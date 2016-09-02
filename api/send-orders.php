@@ -7,51 +7,6 @@
 
 	$tableNumber = $_POST['table_number'];
 	$transactionId = $_POST['transaction_id'];
-	// $transactionId = 'a56fab2a-6280-4a7b-ae53-ec0a795735e6';
-
-	// $sql = "SELECT * FROM `order_detail` od
-	// 		WHERE od.`transaction_id` = $transactionId AND od.`item_id` = $itemId
-	// 		AND od.`serving_id` = $servingId 
-	// 		AND od.`sauces` = '$serializedSauces'
-	// 		AND od.`side_dish_id` = $sideDishId";
-
-	// $result = $conn->query($sql);
-	// if ($result->num_rows > 0) {
-	// 	# code...
-	// 	//Update record order if existing
-	// 	// $sql = "UPDATE `temporary_order_detail`
-	// 	// 		SET qty = qty + $qty
-	// 	// 		WHERE table_number = $tableNumber AND item_id = $itemId
-	// 	// 		AND serving_id = $servingId AND sauces = '$serializedSauces'
-	// 	// 		AND side_dish_id = $sideDishId";
-	// 	$sql = "UPDATE `temporary_order_detail`
-	// 			SET qty = qty + $qty
-	// 			WHERE transaction_id='$transactionId'";
-
-	// 	if (!$conn->query($sql)) {
-	// 		echo json_encode(
-	// 			array(
-	// 				'status'  => 'error',
-	// 				'message' => 'Error in saving order toh',
-	// 				'error'   => mysqli_error($conn),
-	// 				'tableNumber' => $tableNumber,
-	// 				'sql'     => $sql
-	// 			)
-	// 		);
-	// 		die;
-	// 	}
-	// 	echo json_encode(
-	// 		array(
-	// 			'status' => 'Ok',
-	// 			'message' => 'Save Successfull',
-	// 			'tableNumber' => $tableNumber,
-	// 			'sql'     => $sql
-	// 		)
-	// 	);
-
-	// 	$conn->close();
-	// 	die;
-	// }
 
 	$sql = "SELECT * FROM order_header WHERE transaction_id = '$transactionId'";// check if exist
 	$result = $conn->query($sql);
@@ -80,7 +35,7 @@
 				array(
 					'status'  => 'error',
 					'error'   => mysqli_error($conn),
-					'message' => 'Error in saving order -> order_header',
+					'message' => 'Error in sending order -> order_header',
 					'tableNumber' => $tableNumber,
 					'sqlInsertHeader'     => $sqlInsertHeader
 				)
@@ -96,6 +51,7 @@
 			echo json_encode(
 				array(
 					'status'  => 'error',
+					'error'   => mysqli_error($conn),
 					'message' => 'Error in deleting order -> order_header',
 					'tableNumber' => $tableNumber,
 					'sqlDeleteHeader'     => $sqlDeleteHeader
@@ -121,7 +77,8 @@
 		echo json_encode(
 			array(
 				'status'  => 'error',
-				'message' => 'Error in saving order -> order_detail',
+				'error'   => mysqli_error($conn),
+				'message' => 'Error in sending order -> order_detail',
 				'tableNumber' => $tableNumber,
 				'sqlInsertDetails'     => $sqlInsertDetails
 			)
@@ -137,6 +94,7 @@
 		echo json_encode(
 			array(
 				'status'  => 'error',
+				'error'   => mysqli_error($conn),
 				'message' => 'Error in deleting order -> temporary_order_detail',
 				'tableNumber' => $tableNumber,
 				'sqlDeleteDetails'     => $sqlDeleteDetails
@@ -153,6 +111,7 @@
 		echo json_encode(
 			array(
 				'status'  => 'error',
+				'error'   => mysqli_error($conn),
 				'message' => 'Error in updating order -> order_detail',
 				'tableNumber' => $tableNumber,
 				'sqlUpdateDetails'     => $sqlUpdateDetails
@@ -161,14 +120,12 @@
 		$conn->close();
 		die;
 	} // UPDATE order_detail SET status = 'S'
-
+	$conn->close();
 	echo json_encode(
 		array(
 			'status' => 'ok',
-			'message' => 'Save Successfull',
+			'message' => 'Order successfully sent to kitchen'
 		)
 	);
-
-	$conn->close();
 	die;
 ?>

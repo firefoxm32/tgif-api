@@ -16,12 +16,12 @@
 	if($result->num_rows > 0) {
 		while ($row = $result->fetch_object()) {
 			# code...
-			$totalPrice += $row->price * $row->qty;
+			$totalPrice += (($row->price)*($row->qty));
 		}
 	}
 
 	$response = array(
-		'status'  => 'Ok',
+		'status'  => 'ok',
 		'total_price'     => $totalPrice
 	);
 

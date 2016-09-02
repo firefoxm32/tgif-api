@@ -24,7 +24,7 @@
 	}
 	echo json_encode(
 		array(
-			'status' => 'Ok',
+			'status' => 'ok',
 			'message' => 'Edit Successfull',
 			'sql'     => $sql
 		)

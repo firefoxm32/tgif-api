@@ -15,10 +15,6 @@
 		# code...
 		while ($row = $result->fetch_object()) {
 			# code...
-			/*$sqlItems = "SELECT fmi.`item_id`
-						 FROM `food_menu_items` fmi
-						 WHERE fmi.`menu_id` = $row->menu_id
-						 ORDER BY fmi.`order_ctr` DESC LIMIT 2";*/
 			$sqlItems = "SELECT fmi.`item_id` 
 				FROM `food_menu_items` fmi 
 				WHERE fmi.`menu_id` = $row->menu_id 

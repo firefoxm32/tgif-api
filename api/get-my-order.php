@@ -12,7 +12,7 @@
 
 	if ($stats == "S" OR $stats == "s") {
 		# code...
-		$sql = "SELECT id, qty, od.`status`, od.`item_id`, od.`sauces`,
+		$sql = "SELECT id, qty, od.`status`, od.`item_id`, od.`sauces`,fmi.`image`,
 		fmi.`menu_name`, fs.`serving_name`, sd.`side_dish_name`
 		FROM `order_detail` od LEFT JOIN
 		`food_menu_items` fmi ON fmi.`item_id` = od.`item_id` LEFT JOIN
@@ -21,7 +21,7 @@
 		WHERE transaction_id = '$transactionId' AND od.`status` = '$stats'";
 	} elseif ($stats == "C" OR $stats == "c") {
 		# code...
-		$sql = "SELECT id, qty, od.`status`, od.`item_id`, od.`sauces`,
+		$sql = "SELECT id, qty, od.`status`, od.`item_id`, od.`sauces`,fmi.`image`,
 		fmi.`menu_name`, fs.`serving_name`, sd.`side_dish_name`
 		FROM `order_detail` od LEFT JOIN
 		`food_menu_items` fmi ON fmi.`item_id` = od.`item_id` LEFT JOIN
@@ -29,7 +29,8 @@
 		`side_dish` sd ON sd.`side_dish_id` = od.`side_dish_id`
 		WHERE transaction_id = '$transactionId' AND od.`status` = '$stats'";
 	} else {
-		$sql = "SELECT id, qty, tod.`item_id`, tod.`sauces`, fmi.`menu_name`, fs.`serving_name`, sd.`side_dish_name`
+		$sql = "SELECT id, qty, tod.`item_id`, tod.`sauces`, fmi.`menu_name`,fmi.`image`,
+		fs.`serving_name`, sd.`side_dish_name`
 		FROM `temporary_order_detail` tod LEFT JOIN
 		`food_menu_items` fmi ON fmi.`item_id` = tod.`item_id` LEFT JOIN
 		`food_servings` fs ON fs.`serving_id` = tod.`serving_id` LEFT JOIN
@@ -64,6 +65,7 @@
 			$item->id = $row->id;
 		    $item->item_id = $row->item_id;
 		    $item->item_name = $row->menu_name;
+		    $item->image = $row->image;
 		    $item->serving = $row->serving_name;
 		    $item->sauces = $sauces;
 		    $item->side_dish = $row->side_dish_name;

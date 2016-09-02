@@ -86,9 +86,9 @@
 		$arrServingId = explode(",", $servingId);
 		for ($i=0; $i < sizeof($arrServingName); $i++) { 
 			# code...
-			if ($servingId != "") {
+			// if ($servingId != "") {
 			 	# code...
-			 	if(sizeof($arrServingId) > $i) {
+			 	if(sizeof($arrServingId) > $i && $servingId != "") {
 					$sql = "UPDATE food_servings SET serving_name = '$arrServingName[$i]', fs_abbreviation = 'FS' WHERE serving_id = $arrServingId[$i]";
 					if (!$conn->query($sql)) {
 						echo json_encode(
@@ -115,7 +115,7 @@
 						$conn->close();
 						die;
 					}
-				}
+				// }
 			 } else {
 				$sql = "INSERT INTO food_servings(serving_name, fs_abbreviation)VALUES(
 					'$arrServingName[$i]', 'SF')"; 
