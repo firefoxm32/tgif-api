@@ -7,7 +7,7 @@
 
 	$transactionId = $_POST['transaction_id'];
 
-	$sql = "SELECT od.`qty`, fp.`price` FROM `order_detail` od
+	$sql = "SELECT od.`quantity`, fp.`price` FROM `order_detail` od
 		LEFT JOIN `food_price` fp ON fp.`serving_id` = od.`serving_id`
 		WHERE od.`transaction_id` = '$transactionId'";
 
@@ -16,7 +16,7 @@
 	if($result->num_rows > 0) {
 		while ($row = $result->fetch_object()) {
 			# code...
-			$totalPrice += (($row->price)*($row->qty));
+			$totalPrice += (($row->price)*($row->quantity));
 		}
 	}
 

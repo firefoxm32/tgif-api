@@ -8,8 +8,8 @@
 	$itemId = $_GET['item_id'];
 
 	$sql = "SELECT fp.`price`, fs.`serving_id`, 
-	fs.`serving_name`, fs.`fs_abbreviation` FROM `food_price` fp
-	LEFT JOIN `food_servings` fs ON fs.`serving_id` = fp.`serving_id`
+	fs.`serving_name`, fs.`serving_code` FROM `food_price` fp
+	LEFT JOIN `food_serving` fs ON fs.`serving_id` = fp.`serving_id`
 	WHERE fp.`item_id` = $itemId";
 
 	$result = $conn->query($sql);
@@ -21,7 +21,7 @@
 		}
 	}
 
-	$sql = "SELECT s.`sauce_id`, s.`sauce_name`, s.`s_abbreviation` FROM `sauce` s WHERE s.`item_id` = $itemId";
+	$sql = "SELECT s.`sauce_id`, s.`sauce_name`, s.`sauce_code` FROM `sauce` s WHERE s.`item_id` = $itemId";
 
 	$result = $conn->query($sql);
 	if ($result->num_rows > 0) {
@@ -32,7 +32,7 @@
 		}
 	}
 
-	$sql = "SELECT sd.`side_dish_id`, sd.`side_dish_name`, sd.`sd_abbreviation` FROM `side_dish` sd 
+	$sql = "SELECT sd.`side_dish_id`, sd.`side_dish_name`, sd.`side_dish_code` FROM `side_dish` sd 
 		WHERE sd.`item_id` = $itemId";
 
 	$result = $conn->query($sql);

@@ -5,21 +5,21 @@
 	$db = new DBConnection();
 	$conn = $db->connect();
 
-	$label = $_POST['label'];
+	$menuName = $_POST['menu_name'];
 	$id = $_POST['id'];
 	$action = $_POST['action'];
 
 	switch ($action) {
 		case 'add':
-			$sql = "INSERT INTO food_menus(label)VALUES('$label')";
+			$sql = "INSERT INTO food_menu(menu_name)VALUES('$menuName')";
 			$message = "Save Successfull";
 			break;
 		case 'edit':
-			$sql = "UPDATE food_menus SET label = '$label' WHERE menu_id = $id";
+			$sql = "UPDATE food_menu SET menu_name = '$menuName' WHERE menu_id = $id";
 			$message = "Update Successfull";
 			break;
 		default:
-			$sql = "UPDATE food_menus SET category_status = 'I' WHERE menu_id = $id";
+			$sql = "UPDATE food_menu SET menu_status = 'I' WHERE menu_id = $id";
 			$message = "Delete Successfull";
 			break;
 	}

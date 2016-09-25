@@ -25,10 +25,8 @@
 
 	echo json_encode(
 		array(
-			'status'  => 'Ok',
-			'message' => 'Save Successfull',
-			'id' 	  => $id,
-			'sql'     => $sql
+			'status'  => 'ok',
+			'message' => 'Save Successfull'
 		)
 	);
 

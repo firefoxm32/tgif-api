@@ -6,17 +6,32 @@
 	$conn = $db->connect();
 
 	$transactionId = $_POST['transaction_id'];
-	$tableNumber = $_POST['table_number'];
 	$cashAmount = $_POST['cash_amount'];
+	$totalPrice = $_POST['total_price'];
 
-	$sql = "INSERT INTO cash_header(transaction_id, table_number, 
-			cash_amount)VALUES('$transactionId', $tableNumber, $cashAmount)";
+	$sql = "INSERT INTO cash_header(transaction_date,transaction_id, 
+			cash_amount)VALUES(NOW(),'$transactionId', $cashAmount)";
 
 	if (!$conn->query($sql)) {
 		echo json_encode(
 			array(
 				'status'  => 'error',
 				'message' => 'Error in saving cash_header',
+				'error'   => mysqli_error($conn),
+				'sql'     => $sql
+			)
+		);
+		$conn->close();
+		die;
+	}
+
+	$sql = "INSERT INTO cash_details(credit,transaction_id)VALUES($totalPrice, '$transactionId')";
+
+	if (!$conn->query($sql)) {
+		echo json_encode(
+			array(
+				'status'  => 'error',
+				'message' => 'Error in saving cash_details',
 				'error'   => mysqli_error($conn),
 				'sql'     => $sql
 			)

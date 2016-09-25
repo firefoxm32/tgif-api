@@ -7,7 +7,7 @@
 	$id = $_POST['id'];
 	$qty = $_POST['qty'];
 
-	$sql = "UPDATE `temporary_order_detail` SET qty = $qty WHERE id = $id";
+	$sql = "UPDATE `temporary_order_detail` SET quantity = $qty WHERE id = $id";
 
 	if (!$conn->query($sql)) {
 		# code...

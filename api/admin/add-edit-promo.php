@@ -11,7 +11,7 @@
 
 
 	# code...
-	$sql = "UPDATE food_menu_items SET promo_price = $promoPrice, promo_status = '$promoStatus' WHERE item_id = $itemId";
+	$sql = "UPDATE food_items SET promo_price = $promoPrice, promo_status = '$promoStatus' WHERE item_id = $itemId";
 
 	if (!$conn->query($sql)) {
 		# code...

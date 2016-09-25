@@ -9,7 +9,7 @@ require_once("config/DBConnection.php");
 
 	$param = $_GET['params'];
 
-	$sql = "SELECT * FROM food_menu_items WHERE menu_id = $param AND status = 'A'";
+	$sql = "SELECT * FROM food_items WHERE menu_id = $param AND status = 'A' AND promo_status='I'";
 
 	$result = $conn->query($sql);
 
@@ -27,6 +27,5 @@ require_once("config/DBConnection.php");
 		'param'  => $param,
 		'items'  => $itemList
 	);
-	echo json_encode($response);
 	$conn->close();
- ?>
+	echo json_encode($response);

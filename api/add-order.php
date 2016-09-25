@@ -13,12 +13,12 @@
 	$qty = $_POST['qty'];
 
 	//Check header if existing
-	$sql = "SELECT * FROM `temp_order_header` toh WHERE toh.`transaction_id` = '$transactionId'";
+	$sql = "SELECT * FROM `temporary_order_header` toh WHERE toh.`transaction_id` = '$transactionId'";
 	$result = $conn->query($sql);
 	if ($result->num_rows == 0) {
 		# code...
 		//Insert temp_order_header
-		$sql = "INSERT INTO `temp_order_header`(transaction_id, table_number, date_order)VALUES('$transactionId', $tableNumber, NOW())";
+		$sql = "INSERT INTO `temporary_order_header`(transaction_id, date_order)VALUES('$transactionId', NOW())";
 		if (!$conn->query($sql)) {
 			echo json_encode(
 				array(
@@ -51,7 +51,7 @@
 		# code...
 		//Update record order if existing
 		$sql = "UPDATE `temporary_order_detail`
-				SET qty = qty + $qty
+				SET quantity = quantity + $qty
 				WHERE transaction_id = '$transactionId' AND item_id = $itemId
 				AND serving_id = $servingId AND sauces = '$serializedSauces'
 				AND side_dish_id = $sideDishId";
@@ -63,7 +63,7 @@
 			echo json_encode(
 				array(
 					'status'  => 'error',
-					'message' => 'Error in adding order toh',
+					'message' => 'Error in adding order tod',
 					'error'   => mysqli_error($conn),
 					'tableNumber' => $tableNumber,
 					'sql'     => $sql
@@ -84,9 +84,8 @@
 		die;
 	}
 
-	$sql = "INSERT INTO `temporary_order_detail`(
-			table_number, transaction_id,item_id,serving_id,
-			sauces,side_dish_id,qty)VALUES($tableNumber, '$transactionId', $itemId, $servingId,
+	$sql = "INSERT INTO `temporary_order_detail`(transaction_id,item_id,serving_id,
+			sauces,side_dish_id,quantity)VALUES('$transactionId', $itemId, $servingId,
 			'$serializedSauces',$sideDishId,$qty)";
 
 	if (!$conn->query($sql)) {

@@ -12,30 +12,30 @@
 
 	if ($stats == "S" OR $stats == "s") {
 		# code...
-		$sql = "SELECT id, qty, od.`status`, od.`item_id`, od.`sauces`,fmi.`image`,
-		fmi.`menu_name`, fs.`serving_name`, sd.`side_dish_name`
+		$sql = "SELECT id, quantity, od.`status`, od.`item_id`, od.`sauces`,fi.`image`,
+		fi.`item_name`, fs.`serving_name`, sd.`side_dish_name`
 		FROM `order_detail` od LEFT JOIN
-		`food_menu_items` fmi ON fmi.`item_id` = od.`item_id` LEFT JOIN
-		`food_servings` fs ON fs.`serving_id` = od.`serving_id` LEFT JOIN
+		`food_items` fi ON fi.`item_id` = od.`item_id` LEFT JOIN
+		`food_serving` fs ON fs.`serving_id` = od.`serving_id` LEFT JOIN
 		`side_dish` sd ON sd.`side_dish_id` = od.`side_dish_id`
 		WHERE transaction_id = '$transactionId' AND od.`status` = '$stats'";
 	} elseif ($stats == "C" OR $stats == "c") {
 		# code...
-		$sql = "SELECT id, qty, od.`status`, od.`item_id`, od.`sauces`,fmi.`image`,
-		fmi.`menu_name`, fs.`serving_name`, sd.`side_dish_name`
+		$sql = "SELECT id, quantity, od.`status`, od.`item_id`, od.`sauces`,fi.`image`,
+		fi.`item_name`, fs.`serving_name`, sd.`side_dish_name`
 		FROM `order_detail` od LEFT JOIN
-		`food_menu_items` fmi ON fmi.`item_id` = od.`item_id` LEFT JOIN
-		`food_servings` fs ON fs.`serving_id` = od.`serving_id` LEFT JOIN
+		`food_items` fi ON fi.`item_id` = od.`item_id` LEFT JOIN
+		`food_serving` fs ON fs.`serving_id` = od.`serving_id` LEFT JOIN
 		`side_dish` sd ON sd.`side_dish_id` = od.`side_dish_id`
 		WHERE transaction_id = '$transactionId' AND od.`status` = '$stats'";
 	} else {
-		$sql = "SELECT id, qty, tod.`item_id`, tod.`sauces`, fmi.`menu_name`,fmi.`image`,
+		$sql = "SELECT id, quantity, tod.`item_id`, tod.`sauces`, fi.`item_name`,fi.`image`,
 		fs.`serving_name`, sd.`side_dish_name`
 		FROM `temporary_order_detail` tod LEFT JOIN
-		`food_menu_items` fmi ON fmi.`item_id` = tod.`item_id` LEFT JOIN
-		`food_servings` fs ON fs.`serving_id` = tod.`serving_id` LEFT JOIN
+		`food_items` fi ON fi.`item_id` = tod.`item_id` LEFT JOIN
+		`food_serving` fs ON fs.`serving_id` = tod.`serving_id` LEFT JOIN
 		`side_dish` sd ON sd.`side_dish_id` = tod.`side_dish_id`
-		WHERE transaction_id = '$transactionId'";
+		WHERE transaction_id = '$transactionId' AND tod.`status` = 'P'";
 	}
 
 	$item_orders = array();
@@ -64,12 +64,12 @@
 			$item = new stdClass();
 			$item->id = $row->id;
 		    $item->item_id = $row->item_id;
-		    $item->item_name = $row->menu_name;
+		    $item->item_name = $row->item_name;
 		    $item->image = $row->image;
 		    $item->serving = $row->serving_name;
 		    $item->sauces = $sauces;
 		    $item->side_dish = $row->side_dish_name;
-		    $item->qty = $row->qty;
+		    $item->qty = $row->quantity;
 		    $item->status = $row->status;
 		    $item_orders[] = $item;
 		}
@@ -79,7 +79,7 @@
 		'items'   => (array)$item_orders,
 		'size'    => sizeof($item_orders),
 		'table_number'     => $tableNumber,
-		'sql'		=> $sql
+		'sql'    => $sql
 	);
 
 	echo json_encode($response);

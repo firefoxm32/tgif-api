@@ -5,8 +5,8 @@
 	$db = new DBConnection();
 	$conn = $db->connect();
 
-	$menuId = $_POST['category_id'];
-	$menuName = $_POST['item_name'];
+	$menuId = $_POST['menu_id'];
+	$itemName = $_POST['item_name'];
 	$image = $_POST['image'];
 	$description = $_POST['description'];
 	$itemId = $_POST['item_id'];
@@ -28,12 +28,12 @@
 	if ($action == 'delete') {
 		# code...
 		// $sql = "UPDATE `food_menu_items` 
-		// SET menu_id = $menuId, menu_name = '$menuName', 
+		// SET menu_id = $menuId, menu_name = '$itemName', 
 		// 	image = '$image', description = '$description' 
 		// WHERE item_id = $itemId";
 		// $message = "Edit Successfull";
 	// } else {
-		$sql = "UPDATE `food_menu_items` SET status = 'I' WHERE item_id = $itemId";
+		$sql = "UPDATE `food_items` SET status = 'I' WHERE item_id = $itemId";
 		$message = "Delete Successfull";
 
 		if (!$conn->query($sql)) {
@@ -60,8 +60,8 @@
 		die;
 	}
 
-	$sql = "UPDATE `food_menu_items` 
-		SET menu_id = $menuId, menu_name = '$menuName', 
+	$sql = "UPDATE `food_items` 
+		SET menu_id = $menuId, item_name = '$itemName', 
 			image = '$image', description = '$description' 
 		WHERE item_id = $itemId";
 		$message = "Edit Successfull";
@@ -89,7 +89,7 @@
 			// if ($servingId != "") {
 			 	# code...
 			 	if(sizeof($arrServingId) > $i && $servingId != "") {
-					$sql = "UPDATE food_servings SET serving_name = '$arrServingName[$i]', fs_abbreviation = 'FS' WHERE serving_id = $arrServingId[$i]";
+					$sql = "UPDATE food_serving SET serving_name = '$arrServingName[$i]', serving_code = 'FS' WHERE serving_id = $arrServingId[$i]";
 					if (!$conn->query($sql)) {
 						echo json_encode(
 							array(
@@ -117,7 +117,7 @@
 					}
 				// }
 			 } else {
-				$sql = "INSERT INTO food_servings(serving_name, fs_abbreviation)VALUES(
+				$sql = "INSERT INTO food_serving(serving_name, serving_code)VALUES(
 					'$arrServingName[$i]', 'SF')"; 
 				if (!$conn->query($sql)) {
 					echo json_encode(
@@ -151,7 +151,7 @@
 	}
 	if ($rServingId != "") {
 		# code...
-		$sql = "DELETE FROM food_servings WHERE serving_id IN($rServingId)";
+		$sql = "DELETE FROM food_serving WHERE serving_id IN($rServingId)";
 		if (!$conn->query($sql)) {
 			echo json_encode(
 				array(
@@ -190,7 +190,7 @@
 				if (sizeof($arrSauceId) > $i && $sauceId != "") {
 				# code...
 					$sql = "UPDATE sauce SET item_id = $itemId, sauce_name = '$arrSauceName[$i]', 
-					s_abbreviation = 'S' WHERE sauce_id = $arrSauceId[$i]";
+					sauce_code = 'S' WHERE sauce_id = $arrSauceId[$i]";
 					if (!$conn->query($sql)) {
 						echo json_encode(
 							array(
@@ -205,7 +205,7 @@
 					}
 				// }
 			} else {
-				$sql = "INSERT INTO sauce(sauce_name, item_id, s_abbreviation)VALUES('$arrSauceName[$i]', $itemId, 'S')";
+				$sql = "INSERT INTO sauce(sauce_name, item_id, sauce_code)VALUES('$arrSauceName[$i]', $itemId, 'S')";
 				if (!$conn->query($sql)) {
 					echo json_encode(
 						array(
@@ -249,7 +249,7 @@
 			//  	# code...
 		 	if(sizeof($arrSideDishId) > $i && $sideDishId != "") {
 				$sql = "UPDATE side_dish SET item_id = $itemId, 
-				side_dish_name = '$arrSideDishName[$i]', sd_abbreviation = 'SD' 
+				side_dish_name = '$arrSideDishName[$i]', side_dish_code = 'SD' 
 				WHERE side_dish_id = $arrSideDishId[$i]";
 
 				if (!$conn->query($sql)) {
@@ -266,7 +266,7 @@
 				}
 			// }
 			 } else {
-				$sql = "INSERT INTO side_dish(side_dish_name, item_id, sd_abbreviation)VALUES(
+				$sql = "INSERT INTO side_dish(side_dish_name, item_id, side_dish_code)VALUES(
 				'$arrSideDishName[$i]', $itemId, 'SD')";
 			
 				if (!$conn->query($sql)) {

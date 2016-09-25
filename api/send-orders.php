@@ -12,7 +12,7 @@
 	$result = $conn->query($sql);
 
 	if($result->num_rows > 0) {
-		$sqlDeleteHeader = "DELETE FROM temp_order_header WHERE transaction_id = '$transactionId'";
+		$sqlDeleteHeader = "DELETE FROM temporary_order_header WHERE transaction_id = '$transactionId'";
 		if (!$conn->query($sqlDeleteHeader)) {
 		# code...
 			echo json_encode(
@@ -28,7 +28,7 @@
 			die;
 		}
 	} else {
-		$sqlInsertHeader = "INSERT INTO `order_header` SELECT * FROM temp_order_header WHERE transaction_id = '$transactionId'";
+		$sqlInsertHeader = "INSERT INTO `order_header` SELECT * FROM temporary_order_header WHERE transaction_id = '$transactionId'";
 		if (!$conn->query($sqlInsertHeader)) {
 			# code...
 			echo json_encode(
@@ -44,7 +44,7 @@
 			die;
 		} // INSERT INTO order_header
 
-		$sqlDeleteHeader = "DELETE FROM `temp_order_header` WHERE transaction_id = '$transactionId'";
+		$sqlDeleteHeader = "DELETE FROM `temporary_order_header` WHERE transaction_id = '$transactionId'";
 
 		if (!$conn->query($sqlDeleteHeader)) {
 			# code...
@@ -65,11 +65,10 @@
 
 	
 
-	$sqlInsertDetails = "INSERT INTO `order_detail`(id, table_number, item_id,
-			 serving_id, sauces, side_dish_id, qty, transaction_id)
-		SELECT tod.`id`, tod.`table_number`,
-			tod.`item_id`, tod.`serving_id`, tod.`sauces`,
-			tod.`side_dish_id`, tod.`qty`, tod.`transaction_id`
+	$sqlInsertDetails = "INSERT INTO `order_detail`(id, item_id,
+			 serving_id, sauces, side_dish_id, quantity, transaction_id)
+		SELECT tod.`id`, tod.`item_id`, tod.`serving_id`, tod.`sauces`,
+			tod.`side_dish_id`, tod.`quantity`, tod.`transaction_id`
 		FROM `temporary_order_detail` tod WHERE tod.`transaction_id` = '$transactionId'";
 
 	if (!$conn->query($sqlInsertDetails)) {
@@ -128,4 +127,3 @@
 		)
 	);
 	die;
-?>

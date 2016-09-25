@@ -8,7 +8,7 @@ class DBConnection
 	private $servername = "localhost";
 	private $username = "root";
 	private $password = "root";
-	private $dbName = "TGIF_db";
+	private $dbName = "tgifriday_db";
 	private $conn = false;
 
 	public function connect()

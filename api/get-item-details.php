@@ -8,29 +8,27 @@
     $param = $_GET['param'];
 
     $sql = "SELECT *
-            FROM `food_menu_items` fmi
-            WHERE fmi.`item_id` = '$param'";
+            FROM `food_items` fi
+            WHERE fi.`item_id` = $param";
     $result = $conn->query($sql);
-    $log_sql = $sql;
     //$servings = array();
-    $itemId;
     if ($result->num_rows > 0) {
         # code...
-        while ($row = $result->fetch_object()) {
+        // while ($row = $result->fetch_object()) {
             # code...
             //array('serving_name' => $row->serving_name,'price' => $row->price)
             //$servings[] = $row;
+            $row = $result->fetch_object();
             $itemId = $row->item_id;
-        }
+            $description = $row->description;
+        // }
     } // Get item_id FROM food_menu_item
 
     $sql = "SELECT fp.`price`,fs.`serving_name`,fs.`serving_id` FROM `food_price` fp
-            LEFT JOIN `food_servings` fs
+            LEFT JOIN `food_serving` fs
             ON fp.`serving_id` = fs.`serving_id` WHERE fp.`item_id` = $itemId";    
     $result = $conn->query($sql);
-    $log_sql = $sql;
     $servings = array();
-    $itemId;
     if ($result->num_rows > 0) {
         # code...
         while ($row = $result->fetch_object()) {
@@ -79,6 +77,7 @@
 
     $item = new stdClass();
     $item->id = $itemId;
+    $item->description = $description;
     $item->name = $param;
     $item->servings = $servings;
     $item->sauces = $sauces;
@@ -86,8 +85,7 @@
 
     $response = array(
         'status' => "ok",
-        'item'  => (array)$item/*,
-        'items' => serialize(array(2))*/
+        'item'  => (array)$item
     );
     echo json_encode($response);
     $conn->close();

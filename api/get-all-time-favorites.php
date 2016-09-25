@@ -7,7 +7,7 @@
 
 	$param = $_GET['params'];
 
-	$sqlMenuId = "SELECT fm.`menu_id` FROM `food_menus` fm";
+	$sqlMenuId = "SELECT fm.`menu_id` FROM `food_menu` fm";
 	$result = $conn->query($sqlMenuId);
 
 	$itemId = array();
@@ -15,10 +15,10 @@
 		# code...
 		while ($row = $result->fetch_object()) {
 			# code...
-			$sqlItems = "SELECT fmi.`item_id` 
-				FROM `food_menu_items` fmi 
-				WHERE fmi.`menu_id` = $row->menu_id 
-				ORDER BY fmi.`item_id` ASC LIMIT 2";
+			$sqlItems = "SELECT fi.`item_id` 
+				FROM `food_items` fi 
+				WHERE fi.`menu_id` = $row->menu_id AND fi.`promo_status` = 'I'
+				ORDER BY fi.`item_id` ASC LIMIT 2";
 			
 			$resultItems = $conn->query($sqlItems);
 			if ($resultItems->num_rows > 0) {
@@ -31,13 +31,13 @@
 		}
 	}
 	$ids = implode(",", $itemId);
-	/*$sql = "SELECT * FROM `food_menu_items` fmi
-			WHERE fmi.`item_id` IN ($ids)";*/
-	$sql = "SELECT fmi.`item_id`, fmi.`menu_id`, fmi.`menu_name`, fmi.`image`,
-		fmi.`description`, fmi.`status`, fmi.`abbreviation`, fm.`label` FROM `food_menu_items` fmi
-		LEFT JOIN `food_menus` fm ON
-		fmi.`menu_id` = fm.`menu_id`
-		WHERE fmi.`item_id` IN ($ids)";
+	/*$sql = "SELECT * FROM `food_menu_items` fi
+			WHERE fi.`item_id` IN ($ids)";*/
+	$sql = "SELECT fi.`item_id`, fi.`menu_id`, fi.`item_name`, fi.`image`,
+		fi.`description`, fi.`status`, fm.`menu_name`, fi.`promo_status` FROM `food_items` fi
+		LEFT JOIN `food_menu` fm ON
+		fi.`menu_id` = fm.`menu_id`
+		WHERE fi.`item_id` IN ($ids)";
 	$result = $conn->query($sql);
 
 	$itemList = array();
@@ -49,11 +49,11 @@
 		}
 	}
 	//echo implode(",", $menuId);
+	$conn->close();
 	$response = array(
 		'status' => "ok",
-		'items'  => $itemList
+		'items'  => $itemList,
+		'sql'    => $sql
 	);
-
 	echo json_encode($response);
-	$conn->close();
- ?>
+	die;

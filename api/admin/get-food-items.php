@@ -13,15 +13,15 @@
 		".$_GET['field']." LIKE '%$val%'" : "";*/
 	if ($field == "") {
 		# code...
-		$sql = "SELECT fmi.`item_id`, fmi.`menu_id`, fm.`label`, fmi.`menu_name`, 
-			fmi.`image`, fmi.`description`, fmi.`promo_price`, fmi.`promo_status`
-		FROM `food_menu_items` fmi LEFT JOIN `food_menus` fm 
-		ON fmi.`menu_id` = fm.`menu_id` WHERE fmi.`status` = 'A'";
+		$sql = "SELECT fi.`item_id`, fi.`menu_id`, fm.`menu_name`, fi.`item_name`, 
+			fi.`image`, fi.`description`, fi.`promo_price`, fi.`promo_status`
+		FROM `food_items` fi LEFT JOIN `food_menus` fm 
+		ON fi.`menu_id` = fm.`menu_id` WHERE fi.`status` = 'A'";
 	} else {
-		$sql = "SELECT fmi.`item_id`, fmi.`menu_id`, fm.`label`, fmi.`menu_name`, 
-			fmi.`image`, fmi.`description` 
-		FROM `food_menu_items` fmi LEFT JOIN `food_menus` fm 
-		ON fmi.`menu_id` = fm.`menu_id` WHERE $field LIKE '%$val%' AND WHERE fmi.`status` = 'A'";
+		$sql = "SELECT fi.`item_id`, fi.`menu_id`, fm.`menu_name`, fi.`item_name`, 
+			fi.`image`, fi.`description` 
+		FROM `food_items` fi LEFT JOIN `food_menus` fm 
+		ON fi.`menu_id` = fm.`menu_id` WHERE $field LIKE '%$val%' AND WHERE fi.`status` = 'A'";
 	}
 
 	
