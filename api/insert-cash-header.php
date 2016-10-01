@@ -8,6 +8,26 @@
 	$transactionId = $_POST['transaction_id'];
 	$cashAmount = $_POST['cash_amount'];
 	$totalPrice = $_POST['total_price'];
+	$memberId = $_POST['member_id'];
+	$cardName = $_POST['credit_card_name'];
+	$cardNumber = $_POST['credit_card_number'];
+	
+	$sql = "SELECT * FROM membership m WHERE m.`member_id` = '$memberId' AND m.`membership_status` = 'A'";
+
+	if ($memberId != "") {
+		$result = $conn->query($sql);
+		if ($result->num_rows == 0) {
+			# code...
+			$conn->close();
+			$response = array(
+				'status'  => 'error',
+				'message'   => 'Member ID doesnt exist'
+			);
+			echo json_encode($response);
+			die;
+		}		
+	}
+
 
 	$sql = "INSERT INTO cash_header(transaction_date,transaction_id, 
 			cash_amount)VALUES(NOW(),'$transactionId', $cashAmount)";
@@ -59,7 +79,7 @@
 	echo json_encode(
 		array(
 			'status' => 'ok',
-			'message' => 'Save Successfull',
+			'message' => 'Payments sent to the cashier',
 			'sql'     => $sql
 		)
 	);

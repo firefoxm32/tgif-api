@@ -14,14 +14,14 @@
 	if ($field == "") {
 		# code...
 		$sql = "SELECT fi.`item_id`, fi.`menu_id`, fm.`menu_name`, fi.`item_name`, 
-			fi.`image`, fi.`description`, fi.`promo_price`, fi.`promo_status`
-		FROM `food_items` fi LEFT JOIN `food_menus` fm 
-		ON fi.`menu_id` = fm.`menu_id` WHERE fi.`status` = 'A'";
+			fi.`image`, fi.`description`, fi.`status`, fi.`promo_status`
+		FROM `food_items` fi LEFT JOIN `food_menu` fm 
+		ON fi.`menu_id` = fm.`menu_id`";
 	} else {
 		$sql = "SELECT fi.`item_id`, fi.`menu_id`, fm.`menu_name`, fi.`item_name`, 
-			fi.`image`, fi.`description` 
-		FROM `food_items` fi LEFT JOIN `food_menus` fm 
-		ON fi.`menu_id` = fm.`menu_id` WHERE $field LIKE '%$val%' AND WHERE fi.`status` = 'A'";
+			fi.`image`, fi.`description`, fi.`status`, fi.`promo_status` 
+		FROM `food_items` fi LEFT JOIN `food_menu` fm 
+		ON fi.`menu_id` = fm.`menu_id` WHERE $field LIKE '%$val%'";
 	}
 
 	

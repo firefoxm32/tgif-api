@@ -14,18 +14,20 @@
 		$transactionId = $result->fetch_object()->transaction_id;
 	}
 
-	$sql1 = "SELECT cd.`credit`, ch.`cash_amount` FROM `cash_details` cd 
+	$sql1 = "SELECT cd.`credit`, ch.`cash_amount`, ch.`member_id` FROM `cash_details` cd 
 		LEFT JOIN `cash_header` ch ON ch.`transaction_id` = cd.`transaction_id`
 		WHERE cd.`transaction_id` = '$transactionId'";
 	
 	$result1 = $conn->query($sql1);
 	$credit = 0.0;
 	$cash = 0.0;
+	$memberId;
 	if ($result1->num_rows > 0) {
 		# code...
 		$row1 = $result1->fetch_object();
 		$credit = $row1->credit;
 		$cash = $row1->cash_amount;
+		$memberId = $row1->member_id;
 	}
 
 	$sql = "SELECT oh.`transaction_id`, oh.`date_order`, od.`item_id`,
@@ -76,6 +78,7 @@
 			$item->sauces = $sauces;
 			$item->credit = $credit;
 			$item->cash = $cash;
+			$item->member_id = $memberId;
 			$items[] = $item;
 		}
 	}

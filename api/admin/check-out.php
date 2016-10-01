@@ -8,8 +8,10 @@
 	$transactionId = $_POST['transaction_id'];
 	$cashierId = $_POST['cashier_id'];
 	$tableNumber = $_POST['table_number'];
-	
-	$sql = "UPDATE cash_header SET cashier_id = '$cashierId' WHERE transaction_id = '$transactionId'";
+	$senior = $_POST['senior_citizen'];
+	$cashAmount = $_POST['cash_amount'];
+
+	$sql = "UPDATE cash_header SET cashier_id = '$cashierId', senior_citizen_discount = $senior WHERE transaction_id = '$transactionId'";
 
 	if (!$conn->query($sql)) {
 		echo json_encode(
@@ -29,7 +31,21 @@
 		echo json_encode(
 			array(
 				'status'  => 'error',
-				'message' => 'Error in saving user',
+				'message' => 'Error in updating user',
+				'error'   => mysqli_error($conn),
+				'sql'     => $sql
+			)
+		);
+		die;
+	}
+
+	$sql = "INSERT INTO cash_details(debit, transaction_id)VALUES($cashAmount, '$transactionId')";
+
+	if (!$conn->query($sql)) {
+		echo json_encode(
+			array(
+				'status'  => 'error',
+				'message' => 'Error in saving cashier_details',
 				'error'   => mysqli_error($conn),
 				'sql'     => $sql
 			)
@@ -40,7 +56,7 @@
 	echo json_encode(
 		array(
 			'status' => 'ok',
-			'message' => 'Save Successfull',
+			'message' => 'Processing payments complete',
 			'sql'     => $sql
 		)
 	);
