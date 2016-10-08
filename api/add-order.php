@@ -11,6 +11,7 @@
 	$sauces = $_POST['sauces'];
 	$sideDishId = $_POST['side_dish_id'];
 	$qty = $_POST['qty'];
+	$orderType = $_POST['order_type'];
 
 	//Check header if existing
 	$sql = "SELECT * FROM `temporary_order_header` toh WHERE toh.`transaction_id` = '$transactionId'";
@@ -85,8 +86,8 @@
 	}
 
 	$sql = "INSERT INTO `temporary_order_detail`(transaction_id,item_id,serving_id,
-			sauces,side_dish_id,quantity)VALUES('$transactionId', $itemId, $servingId,
-			'$serializedSauces',$sideDishId,$qty)";
+			sauces,side_dish_id,quantity,order_type)VALUES('$transactionId', $itemId, $servingId,
+			'$serializedSauces',$sideDishId,$qty,'$orderType')";
 
 	if (!$conn->query($sql)) {
 		echo json_encode(

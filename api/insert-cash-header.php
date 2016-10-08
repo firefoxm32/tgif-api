@@ -30,14 +30,16 @@
 
 
 	$sql = "INSERT INTO cash_header(transaction_date,transaction_id, 
-			cash_amount)VALUES(NOW(),'$transactionId', $cashAmount)";
+			cash_amount, member_id, credit_card_number, credit_card_name)VALUES(
+			NOW(),'$transactionId', $cashAmount, '$memberId',
+			'$cardNumber', '$cardName')";
 
 	if (!$conn->query($sql)) {
 		echo json_encode(
 			array(
 				'status'  => 'error',
 				'message' => 'Error in saving cash_header',
-				'error'   => mysqli_error($conn),
+				'error'   => mysqli_error($sql),
 				'sql'     => $sql
 			)
 		);

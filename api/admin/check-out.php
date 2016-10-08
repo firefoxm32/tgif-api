@@ -10,8 +10,15 @@
 	$tableNumber = $_POST['table_number'];
 	$senior = $_POST['senior_citizen'];
 	$cashAmount = $_POST['cash_amount'];
+	$orNumber = $_POST['or_number'];
+	$ccName = $_POST['credit_card_name'];
+	$ccNumber = $_POST['credit_card_number'];
 
-	$sql = "UPDATE cash_header SET cashier_id = '$cashierId', senior_citizen_discount = $senior WHERE transaction_id = '$transactionId'";
+	$sql = "UPDATE cash_header SET cashier_id = '$cashierId', 
+		senior_citizen_discount = $senior, 
+		or_number = '$orNumber', credit_card_number = '$ccNumber',
+		credit_card_name = '$ccName'
+		WHERE transaction_id = '$transactionId'";
 
 	if (!$conn->query($sql)) {
 		echo json_encode(

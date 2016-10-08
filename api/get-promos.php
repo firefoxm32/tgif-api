@@ -17,7 +17,7 @@
 			# code...
 			$sqlItems = "SELECT fi.`item_id` 
 				FROM `food_items` fi 
-				WHERE fi.`menu_id` = $row->menu_id AND fi.`promo_status` = 'A'";
+				WHERE fi.`menu_id` = $row->menu_id AND fi.`status` = 'A' AND fi.`promo_status` = 'A'";
 			
 			$resultItems = $conn->query($sqlItems);
 			if ($resultItems->num_rows > 0) {

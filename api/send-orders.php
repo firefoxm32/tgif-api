@@ -66,9 +66,9 @@
 	
 
 	$sqlInsertDetails = "INSERT INTO `order_detail`(id, item_id,
-			 serving_id, sauces, side_dish_id, quantity, transaction_id)
+			 serving_id, sauces, side_dish_id, quantity, transaction_id, order_type)
 		SELECT tod.`id`, tod.`item_id`, tod.`serving_id`, tod.`sauces`,
-			tod.`side_dish_id`, tod.`quantity`, tod.`transaction_id`
+			tod.`side_dish_id`, tod.`quantity`, tod.`transaction_id`, order_type
 		FROM `temporary_order_detail` tod WHERE tod.`transaction_id` = '$transactionId'";
 
 	if (!$conn->query($sqlInsertDetails)) {
@@ -103,7 +103,7 @@
 		die;	
 	} // DELETE FROM temporary_order_detail
 	
-	$sqlUpdateDetails = "UPDATE `order_detail` SET status = 'C' WHERE transaction_id = '$transactionId'";
+	$sqlUpdateDetails = "UPDATE `order_detail` SET status = 'C' WHERE transaction_id = '$transactionId' AND status = 'P'";
 	
 	if (!$conn->query($sqlUpdateDetails)) {
 		# code...

@@ -16,14 +16,14 @@
 		while ($row = $result->fetch_object()) {
 			// $itemList[] = $row;
 
-			$sqlCtr = "SELECT COUNT(*) as ctr FROM `food_items` fi WHERE fi.`menu_id` = $row->menu_id";
+			$sqlCtr = "SELECT COUNT(*) as ctr FROM `food_items` fi WHERE fi.`menu_id` = $row->menu_id AND fi.`status` = 'A' AND fi.`promo_status` = 'I'";
 			$result1 = $conn->query($sqlCtr);
 			$row1 = $result1->fetch_object();
 
 			$item = new stdClass();
 			$item->id = $row->menu_id;
 			$item->menu_name = $row->menu_name;
-			$item->images = $row->images;
+			$item->images = $row->image;
 			$item->ctr = $row1->ctr;
 			$itemList[] = $item;
 		}

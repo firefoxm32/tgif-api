@@ -15,8 +15,8 @@
 		$transactionId = $row->transaction_id;
 	}
 
-	$sql1 = "SELECT od.`id`, od.`item_id`, fi.`item_name`, fs.`serving_name`, fs.`serving_code`,
-            sd.`side_dish_code`,
+	$sql1 = "SELECT od.`id`, od.`item_id`, od.`ready_status`, od.`order_type`,fi.`item_name`, fs.`serving_name`, 
+			fs.`serving_code`, sd.`side_dish_code`, od.`status`,
 			sd.`side_dish_name`, od.`quantity`, od.`sauces`
 			FROM `order_detail` od
 			LEFT JOIN `food_items` fi ON od.`item_id` = fi.`item_id`
@@ -56,11 +56,13 @@
 		    $item->side_dish_code = $row->side_dish_code;
 		    $item->quantity = $row->quantity;
 		    $item->status = $row->status;
+		    $item->ready_status = $row->ready_status;
+		    $item->order_type = $row->order_type;
 		    $item_orders[] = $item;
 		}
 	}
 	$response = array(
-		'status'  => 'Ok',
+		'status'  => 'ok',
 		'items'   => (array)$item_orders,
 		'size'    => sizeof($item_orders),
 		'transaction_id' => $transactionId,

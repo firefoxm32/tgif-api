@@ -9,10 +9,11 @@
 	$status = 'error';
 	$userName = $_POST['username'];
 	$pass = $_POST['password'];
+	$withMobileUser = (isset($_POST['user_type'])) ? "" : "AND u.`user_type`= 'M'";
 
 
-	$sql = "SELECT u.`user_status`, u.`table_number` FROM users u WHERE u.`username` = '$userName' 
-		AND u.`password` = '$pass' AND u.`user_type`='M'";
+	$sql = "SELECT u.`user_status`, u.`table_number`, u.`user_type` FROM users u WHERE u.`username` = '$userName' 
+		AND u.`password` = '$pass'  $withMobileUser";
 	$result = $conn->query($sql);
 	
 	if(!$result) {
@@ -26,11 +27,13 @@
 		die;
 	}
 	$tableNumber = 0;
+	$userType = "";
 	if ($result->num_rows > 0) {
 		$row = $result->fetch_object();
 		if (strtoupper($row->user_status) == 'I') {
 			$valid = true;
 			$tableNumber = $row->table_number;
+			$userType = $row->user_type;
 			$message = 'Login successfull';
 			$status = 'ok';
 		} else {
@@ -59,7 +62,8 @@
 	$response = array(
 		'status' => $status,
 		'message'=> $message,
-		'table_number' => $tableNumber
+		'table_number' => $tableNumber,
+		'user_type' => $userType,
 	);
 
 	$conn->close();
