@@ -15,7 +15,7 @@
 	$ccNumber = $_POST['credit_card_number'];
 
 	$sql = "UPDATE cash_header SET cashier_id = '$cashierId', 
-		senior_citizen_discount = $senior, 
+		senior_citizen_discount = $senior, cash_amount = $cashAmount
 		or_number = '$orNumber', credit_card_number = '$ccNumber',
 		credit_card_name = '$ccName'
 		WHERE transaction_id = '$transactionId'";

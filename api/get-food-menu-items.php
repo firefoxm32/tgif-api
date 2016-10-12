@@ -19,7 +19,17 @@ require_once("config/DBConnection.php");
 		# code...
 		while ($rows = $result->fetch_object()) {
 			# code...
-			$itemList[] = $rows;
+			$item = new stdClass();
+			$item->item_id = $rows->item_id;
+			$item->item_name = $rows->item_name;
+			$item->image = $rows->image;
+			$item->description = $rows->description;
+			$item->status = $rows->status;
+			$item->food_item_code = $rows->food_item_code;
+			$item->promo_status = $rows->promo_status;
+			$item->menu_id = $rows->menu_id;
+			$item->rating = ($rows->rating / $result->num_rows);
+			$itemList[] = $item;
 		}
 	}
 	$response = array(

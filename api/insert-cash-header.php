@@ -6,7 +6,6 @@
 	$conn = $db->connect();
 
 	$transactionId = $_POST['transaction_id'];
-	$cashAmount = $_POST['cash_amount'];
 	$totalPrice = $_POST['total_price'];
 	$memberId = $_POST['member_id'];
 	$cardName = $_POST['credit_card_name'];
@@ -29,9 +28,9 @@
 	}
 
 
-	$sql = "INSERT INTO cash_header(transaction_date,transaction_id, 
-			cash_amount, member_id, credit_card_number, credit_card_name)VALUES(
-			NOW(),'$transactionId', $cashAmount, '$memberId',
+	$sql = "INSERT INTO cash_header(transaction_date,transaction_id, member_id, 
+			credit_card_number, credit_card_name)VALUES(
+			NOW(),'$transactionId', '$memberId',
 			'$cardNumber', '$cardName')";
 
 	if (!$conn->query($sql)) {

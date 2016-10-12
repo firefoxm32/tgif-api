@@ -14,7 +14,7 @@
 		$transactionId = $result->fetch_object()->transaction_id;
 	}
 
-	$sql1 = "SELECT cd.`credit`, ch.`cash_amount`, ch.`member_id`, ch.`credit_card_number`,
+	$sql1 = "SELECT cd.`credit`, ch.`member_id`, ch.`credit_card_number`,
 					ch.`credit_card_name`, ch.`or_number`
 	    FROM `cash_details` cd 
 		LEFT JOIN `cash_header` ch ON ch.`transaction_id` = cd.`transaction_id`
@@ -31,7 +31,6 @@
 		# code...
 		$row1 = $result1->fetch_object();
 		$credit = $row1->credit;
-		$cash = $row1->cash_amount;
 		$memberId = $row1->member_id;
 		$ccNumber = $row1->credit_card_number;
 		$ccName = $row1->credit_card_name;
@@ -85,7 +84,6 @@
 			$item->price = $row->price;
 			$item->sauces = $sauces;
 			$item->credit = $credit;
-			$item->cash = $cash;
 			$item->member_id = $memberId;
 			$item->credit_card_number = $ccNumber;
 			$item->credit_card_name = $ccName;

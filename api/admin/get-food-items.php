@@ -16,12 +16,12 @@
 		$sql = "SELECT fi.`item_id`, fi.`menu_id`, fm.`menu_name`, fi.`item_name`, 
 			fi.`image`, fi.`description`, fi.`status`, fi.`promo_status`
 		FROM `food_items` fi LEFT JOIN `food_menu` fm 
-		ON fi.`menu_id` = fm.`menu_id`";
+		ON fi.`menu_id` = fm.`menu_id` WHERE fi.`status` = 'A'";
 	} else {
 		$sql = "SELECT fi.`item_id`, fi.`menu_id`, fm.`menu_name`, fi.`item_name`, 
 			fi.`image`, fi.`description`, fi.`status`, fi.`promo_status` 
 		FROM `food_items` fi LEFT JOIN `food_menu` fm 
-		ON fi.`menu_id` = fm.`menu_id` WHERE $field LIKE '%$val%'";
+		ON fi.`menu_id` = fm.`menu_id` WHERE fi.`status` = 'A' AND $field LIKE '%$val%'";
 	}
 
 	

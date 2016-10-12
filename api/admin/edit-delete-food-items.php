@@ -5,25 +5,10 @@
 	$db = new DBConnection();
 	$conn = $db->connect();
 
-	$menuId = $_POST['menu_id'];
-	$itemName = $_POST['item_name'];
-	$image = $_POST['image'];
-	$description = $_POST['description'];
-	$itemId = $_POST['item_id'];
 	$action = $_POST['action'];
+	$itemId = $_POST['item_id'];
 
-	$servingName = $_POST['serving_name'];
-	$price = $_POST['price'];
-	$sauceName = $_POST['sauce_name'];
-	$sideDishName = $_POST['side_dish_name'];
 
-	$servingId = $_POST['serving_id'];
-	$sauceId = $_POST['sauce_id'];
-	$sideDishId = $_POST['side_dish_id'];
-
-	$rServingId = $_POST['r_serving_id'];
-	$rSauceId = $_POST['r_sauce_id'];
-	$rSideDishId = $_POST['r_side_dish_id'];
 
 	if ($action == 'delete') {
 		# code...
@@ -59,6 +44,25 @@
 		);
 		die;
 	}
+
+
+		$menuId = $_POST['menu_id'];
+	$itemName = $_POST['item_name'];
+	$image = $_POST['image'];
+	$description = $_POST['description'];
+
+	$servingName = $_POST['serving_name'];
+	$price = $_POST['price'];
+	$sauceName = $_POST['sauce_name'];
+	$sideDishName = $_POST['side_dish_name'];
+
+	$servingId = $_POST['serving_id'];
+	$sauceId = $_POST['sauce_id'];
+	$sideDishId = $_POST['side_dish_id'];
+
+	$rServingId = $_POST['r_serving_id'];
+	$rSauceId = $_POST['r_sauce_id'];
+	$rSideDishId = $_POST['r_side_dish_id'];
 
 	$sql = "UPDATE `food_items` 
 		SET menu_id = $menuId, item_name = '$itemName', 
